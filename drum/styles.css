@@ -10,6 +10,12 @@ h1 {
   text-shadow: 3px 0 #DA0463;
 
 }
+a {
+  color: white;
+  padding: 10px;
+  margin: 12px;
+  font-size: 18px;
+}
 
 footer {
   color: #DBEDF3;
