@@ -12,6 +12,7 @@ for(var i = 1; i <= players.length; i++){
     
 }
 
+// roll the dice
 function rollDice() {
 
     const player_1_dice = Math.floor(Math.random() * (6 - 1 + 1)) + 1;
