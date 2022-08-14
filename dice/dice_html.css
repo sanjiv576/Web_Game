@@ -1,0 +1,54 @@
+  
+        body {
+            text-align: center;
+            font-family: Verdana, Geneva, Tahoma, sans-serif, cursive;
+            background-color: rgb(72, 63, 63);
+            color: white;
+            padding: 10px;
+            box-sizing: border-box;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input {
+            padding: 8px;
+            margin: 10px;
+            border-radius: 8px;
+            width: 200px;
+        }
+
+        button {
+            background-color: blueviolet;
+            color: white;
+            border-radius: 8px;
+            width: 130px;
+            font-size: 16px;
+            padding: 8px;
+            cursor: pointer;
+            margin:10px;
+
+        }
+
+        button:hover {
+            background-color: green;
+            width: 150px;
+            margin: 12px;
+
+        }
+
+        .container {
+            margin: 10%;
+            width: auto;
+            height: auto;
+        }
+
+        @media screen and (max-width:586px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+        }
