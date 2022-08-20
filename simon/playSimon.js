@@ -2,120 +2,60 @@
 var level = 1;
 var pressedBtn = "";
 var patternGenerate = "";
-var playerPattern = "";
+var playerPattern = [];
 var pattern = [];
 var audio;
-var patternIndex = 0;
-var gameOn = true;
+// var patternIndex = 0;
+var gameOn = false;
+
+var showRules = false;
+var buttonNames = ["green", "yellow", "blue", "red"];
 
 $(document).ready(function () {
-
 
     $(document).keypress(function (event) {
         console.log(event.key);
 
-        var count = 0;
-        do {
+        if (!gameOn) {
 
-            $("#level-title").text("Level " + level);
+            nextLevel();
+            gameOn = true;
+        }
 
-            // genearate pattern
-            patternGenerate = Math.floor(Math.random() * 4) + 1;
-            playSound(patternGenerate);
-            // button pressed effect
+        // buttons are clicked
+        $(".btn").click(function () {
+
+            pressedBtn = $(this).attr("id");
+            console.log(pressedBtn + " button pressed");
+
+            playerPattern.push(pressedBtn);
+
+            playSound(pressedBtn);
             buttonEffects(pressedBtn);
-            // store pattern
-            pattern[patternIndex] = patternGenerate;
 
-            console.log("Guess number " + patternGenerate);
+            checkPattern(playerPattern.length - 1);
 
-            // buttons are clicked
-            $(".btn").click(function () {
+        });
+    });
 
-                pressedBtn = $(this).attr("id");
-                console.log(pressedBtn + " button pressed");
+    $("#rulesBtn").click(function(){
 
-                
-                // button pressed effect
-                buttonEffects(pressedBtn);
+        var rules = "1. Let the sound play. 2. Follow the pattern from the begining.";
 
-                for(var i = 0; i < pattern.length; i++){
+        $("#rules").slideToggle();
+        $("#rules").text(rules);
 
-                    if (pattern[i] == playerPattern) {
+        showRules = !showRules;
+        if(showRules){
+            $("#rulesBtn").text("Show rules");
+        }
+        else {
+            $("#rulesBtn").text("Hide rules");
+        }
+        
 
-                        // check pattern and play sound
-                        gameOn = playSound(pressedBtn);
-    
-                        // if correct 
-                        count += 1;
-                        patternIndex += 1;
-                        level += 1;
+        
 
-                        // genearate pattern
-                        patternGenerate = Math.floor(Math.random() * 4) + 1;
-                        // store pattern
-                        pattern[patternIndex] = patternGenerate;
-
-                        pressedBtn = $(this).attr("id");
-                    }
-    
-                    else {
-                        gameOn = false;
-                        // red bg
-                        $("body").css("background-color", "red");
-    
-                        patternIndex = 0;
-                        pattern = [];
-                        level = 1;
-                        return gameOn;
-                    }
-                }
-
-                // if (pattern[count] == playerPattern) {
-
-                //     // check pattern and play sound
-                //     gameOn = playSound(pressedBtn);
-
-                //     // if correct 
-                //     count += 1;
-                //     patternIndex += 1;
-                //     level += 1;
-                // }
-
-                // else {
-                //     gameOn = false;
-                //     // red bg
-                //     $("body").css("background-color", "red");
-
-                //     patternIndex = 0;
-                //     pattern = [];
-                //     level = 1;
-                //     return gameOn;
-                // }
-
-                // check pattern and play sound
-                // gameOn = playSound(pressedBtn);
-
-
-                // if correct 
-                // count += 1;
-                // patternIndex += 1;
-                // level += 1;
-
-
-            });
-            // } while (pattern[count] == playerPattern[count]);
-        } while (gameOn);
-
-        // reset if failed
-        // patternIndex = 0;
-        // pattern = [];
-        // level = 1;
-
-        // red bg
-        // $("body").css("background-color", "red");
-
-        $("#level-title").text("Try again ");
 
     });
 });
@@ -134,26 +74,68 @@ function buttonEffects(pressedBtn) {
 
 function playSound(pressedBtn) {
 
+    audio = new Audio("../simon/sounds/" + pressedBtn + ".mp3");
+    audio.play();
+}
 
-    switch (pressedBtn) {
-        case "green":
-            audio = new Audio("../simon/sounds/green.mp3");
-            break;
 
-        case "red":
-            audio = new Audio("../simon/sounds/red.mp3");
-            break;
+function gameOver() {
 
-        case "yellow":
-            audio = new Audio("../simon/sounds/yellow.mp3");
-            break;
+    // patternIndex = 0;
+    // correctIndx = 0;
+    pattern = [];
+    level = 1;
+    gameOn = false;
 
-        case "blue":
-            audio = new Audio("../simon/sounds/blue.mp3");
-            break;
-        default:
-            console.log("error");
-            break;
-    }
+    $("body").addClass("game-over");
+
+    playSound("wrong");
+
+    setTimeout(function () {
+        $("body").removeClass("game-over");
+    }, 200);
+
+    $("#level-title").text("Game over. Press any key to start");
 
 }
+
+
+function nextLevel() {
+    $("#level-title").text("Level " + level);
+
+    playerPattern = [];
+    // genearate pattern
+    patternGenerate = Math.floor(Math.random() * 4) + 1;
+    var btnName = buttonNames[patternGenerate - 1];
+    playSound(btnName);
+
+    // button pressed effect
+    buttonEffects(btnName);
+
+    // store pattern
+    pattern.push(btnName);
+    // pattern[patternIndex] = btnName;
+
+    console.log("Guess number " + patternGenerate + " : " + btnName);
+}
+
+
+function checkPattern(currentLevel) {
+
+    if (pattern[currentLevel] === playerPattern[currentLevel]) {
+        if (playerPattern.length === pattern.length) {
+            setTimeout(function () {
+                // if correct 
+                level += 1;
+
+                nextLevel();
+            }, 1000);
+        }
+    }
+
+    else {
+        gameOver();
+    }
+}
+
+
