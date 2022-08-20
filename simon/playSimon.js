@@ -13,29 +13,11 @@ var buttonNames = ["green", "yellow", "blue", "red"];
 
 $(document).ready(function () {
 
+    $("#playGame").click(startGame);
     $(document).keypress(function (event) {
-        console.log(event.key);
+        // console.log(event.key);
 
-        if (!gameOn) {
-
-            nextLevel();
-            gameOn = true;
-        }
-
-        // buttons are clicked
-        $(".btn").click(function () {
-
-            pressedBtn = $(this).attr("id");
-            console.log(pressedBtn + " button pressed");
-
-            playerPattern.push(pressedBtn);
-
-            playSound(pressedBtn);
-            buttonEffects(pressedBtn);
-
-            checkPattern(playerPattern.length - 1);
-
-        });
+        startGame();
     });
 
     $("#rulesBtn").click(function(){
@@ -52,10 +34,21 @@ $(document).ready(function () {
         else {
             $("#rulesBtn").text("Hide rules");
         }
-        
 
-        
+    });
 
+    // buttons are clicked
+    $(".btn").click(function () {
+
+        pressedBtn = $(this).attr("id");
+        // console.log(pressedBtn + " button pressed");
+
+        playerPattern.push(pressedBtn);
+
+        playSound(pressedBtn);
+        buttonEffects(pressedBtn);
+
+        checkPattern(playerPattern.length - 1);
 
     });
 });
@@ -114,9 +107,8 @@ function nextLevel() {
 
     // store pattern
     pattern.push(btnName);
-    // pattern[patternIndex] = btnName;
 
-    console.log("Guess number " + patternGenerate + " : " + btnName);
+    // console.log("Guess number " + patternGenerate + " : " + btnName);
 }
 
 
@@ -136,6 +128,16 @@ function checkPattern(currentLevel) {
     else {
         gameOver();
     }
+}
+
+function startGame(){
+    if (!gameOn) {
+
+        nextLevel();
+        gameOn = true;
+    }
+
+    
 }
 
 
