@@ -77,7 +77,7 @@ function gameOver() {
     // patternIndex = 0;
     // correctIndx = 0;
     pattern = [];
-    level = 1;
+    
     gameOn = false;
 
     $("body").addClass("game-over");
@@ -88,7 +88,8 @@ function gameOver() {
         $("body").removeClass("game-over");
     }, 200);
 
-    $("#level-title").text("Game over. Press any key to start");
+    $("#level-title").text("Game over. You've reached  " + level + ". Press any key to start");
+    level = 1;
 
 }
 
